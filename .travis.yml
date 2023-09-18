@@ -16,7 +16,7 @@ script:
   - docker run -it -v $PWD:/e2e -w /e2e cypress/included
   
 
- after_script:
+ after_success:
   - bash ./telegram_notification.sh
   
 #after_success:
