@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - 20.6.1
+  - 11.6.0
 cache: npm
 
 
@@ -8,15 +8,15 @@ install:
   - npm install
   
 branches:
-only:
-  - test-ci
+  only:
+    - test-ci
   
 script:
   - docker pull mateunix/bdd-test
   #- docker run -it -v $PWD:/e2e -w /e2e cypress/included
   
 
- after_success:
+after_success:
   - bash ./telegram_notification.sh
   
 #after_success:
