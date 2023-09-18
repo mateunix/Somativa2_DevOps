@@ -13,7 +13,7 @@ only:
   
 script:
   - docker pull mateunix/bdd-test
-  - docker run -it -v $PWD:/e2e -w /e2e cypress/included
+  #- docker run -it -v $PWD:/e2e -w /e2e cypress/included
   
 
  after_success:
