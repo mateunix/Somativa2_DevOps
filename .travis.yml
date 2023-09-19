@@ -21,7 +21,7 @@ script :
   - echo "Teste bdd concluido"
   #Execucao do OWASP ZAP no nosso site hosteado, ignorando warnings
   - docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t https://agredevops.netlify.app/ 2> /dev/null; (($? == 2)) && echo 'Done' >&2 
-  - echo "Teste zap concluído"
+  - echo "Teste zap concluido"
 
 after_success:
   # Em caso de sucesso enviará uma mensagem para o telegram
