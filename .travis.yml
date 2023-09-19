@@ -26,6 +26,7 @@ script :
 before_deploy:
   - npm install netlify-cli -g
   - yarn build
+  
 deploy:
   provider: script
   edge: true
