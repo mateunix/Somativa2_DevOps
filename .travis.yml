@@ -15,8 +15,8 @@ build:
   
 script pull:
   #Pull dá imagem no dockerhub
-  - docker pull mateunix/node-test:1.0
-  
+  - docker pull mateunix/somativa:2.0
+
 script test:
   #Execucao do cypress no nosso site hosteado
   - docker run -it -v $PWD:/e2e -w /e2e cypress/base
