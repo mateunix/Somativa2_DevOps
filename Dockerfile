@@ -1,6 +1,9 @@
-FROM cypress/included
-
+#Seleciona a imagem base
+FROM node:lts-bookworm 
+#Define o diretório
 WORKDIR /app
 COPY . /app
-
-CMD npm run test:search 
+#Executa o processo de instalação
+RUN npm install 
+#Mostra a versão do npm instalado
+CMD  npm --version

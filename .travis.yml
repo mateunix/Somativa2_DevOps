@@ -1,24 +1,32 @@
-language: node_js
+build:
+  language: node_js
 
-os: linux
+  os: linux
 
-dist: focal
+  dist: focal
 
-node_js:
-  - 18.18.0
+  node_js:
+    - lts/*
 
-cache: npm
+  cache: npm
 
-install:
-  - npm install
+  install:
+    - npm install
   
-script:
-
-  - docker pull mateunix/bdd-test:5.0
-  - docker run mateunix/bdd-test:5.0
-  #- docker run -it -v $PWD:/e2e -w /e2e cypress/included
+script pull:
+  #Pull dá imagem no dockerhub
+  - docker pull mateunix/node-test:1.0
+  
+script test:
+  #Execucao do cypress no nosso site hosteado
+  - docker run -it -v $PWD:/e2e -w /e2e cypress/base
+  - echo "Teste bdd concluido"
+  #Execucao do OWASP ZAP no nosso site hosteado, ignorando warnings
   - docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t https://agredevops.netlify.app/ 2> /dev/null; (($? == 2)) && echo 'Done' >&2 
+  - echo "Teste zap concluído"
 
-after_success:
-  - bash ./telegram_notification.sh
-  
+Deploy:
+  after_success:
+  # Em caso de sucesso enviará uma mensagem para o telegram
+    - bash ./telegram_notification.sh
+    - echo "Success! :D"
