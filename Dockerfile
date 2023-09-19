@@ -4,6 +4,6 @@ FROM node:lts-bookworm
 WORKDIR /app
 COPY . /app
 #Executa o processo de instalação
-RUN npm install 
+RUN npm install -g npm@10.1.0
 #Mostra a versão do npm instalado
 CMD  npm --version
