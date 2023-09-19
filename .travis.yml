@@ -1,23 +1,21 @@
-build:
-  language: node_js
 
-  os: linux
+language: node_js
 
-  dist: focal
+os: linux
 
-  node_js:
-    - lts/*
+dist: focal
 
-  cache: npm
+node_js:
+  - lts/*
 
-  install:
-    - npm install
+cache: npm
+
+install:
+  - npm install
   
-script pull:
+script :
   #Pull dá imagem no dockerhub
   - docker pull mateunix/somativa:2.0
-
-script test:
   #Execucao do cypress no nosso site hosteado
   - docker run -it -v $PWD:/e2e -w /e2e cypress/base
   - echo "Teste bdd concluido"
@@ -25,8 +23,7 @@ script test:
   - docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t https://agredevops.netlify.app/ 2> /dev/null; (($? == 2)) && echo 'Done' >&2 
   - echo "Teste zap concluído"
 
-Deploy:
-  after_success:
+after_success:
   # Em caso de sucesso enviará uma mensagem para o telegram
     - bash ./telegram_notification.sh
     - echo "Success! :D"
