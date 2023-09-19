@@ -2,7 +2,7 @@ const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
   e2e: {
-    baseUrl: 'https://mateusagredevweb.netlify.app/',
+    baseUrl: 'https://agredevops.netlify.app/',
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
