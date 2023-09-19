@@ -11,7 +11,7 @@ script:
 
   - docker pull mateunix/bdd-test
   - docker run -it -v $PWD:/e2e -w /e2e cypress/included
-  - docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t https://agredevops.netlify.app/ -j -a -r stable-full-scan-report.html 2> /dev/null; (($? == 2)) && echo 'Done' >&2 
+  - docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t https://agredevops.netlify.app/ 2> /dev/null; (($? == 2)) && echo 'Done' >&2 
 
 after_success:
   - bash ./telegram_notification.sh
