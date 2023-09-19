@@ -1,6 +1,7 @@
 language: node_js
 node_js:
-  - 11.6.0
+  #- 11.6.0
+  - 20.6.1
 
 cache: npm
 
@@ -9,8 +10,8 @@ install:
   
 script:
 
-  - docker pull mateunix/bdd-test
-  - docker run -it -v $PWD:/e2e -w /e2e cypress/included
+  - docker pull mateunix/bdd-test:5.0
+  #- docker run -it -v $PWD:/e2e -w /e2e cypress/included
   - docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t https://agredevops.netlify.app/ 2> /dev/null; (($? == 2)) && echo 'Done' >&2 
 
 after_success:
