@@ -1,6 +1,7 @@
 language: node_js
 node_js:
   - 11.6.0
+
 cache: npm
 
 install:
@@ -9,7 +10,12 @@ install:
 script:
   - docker pull mateunix/bdd-test
   - docker run -it -v $PWD:/e2e -w /e2e cypress/included
-  
+
+steps:
+  - name: ZAP Scan
+    uses: zaproxy/action-baseline@v0.9.0
+    with:
+      target: 'https://agredevops.netlify.app/'
 
 after_success:
   - bash ./telegram_notification.sh
