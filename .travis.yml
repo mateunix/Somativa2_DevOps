@@ -9,12 +9,13 @@ jobs:
     - stage: build
       script:   
         - npm install
+        - npm --version
 
     - stage: test
       script:
         - npm start &
     #Execucao do cypress no nosso site hosteado
-        - docker run -it -v -p 3000:3000 $PWD:/e2e -w /e2e cypress/included
+        - docker run -it p 3000:3000 -v - $PWD:/e2e -w /e2e cypress/included
         - echo "Teste bdd concluido"
     #Execucao do OWASP ZAP no nosso site hosteado, ignorando warnings (apenas parando se houver algum problema)
       #- docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t https://agredevops.netlify.app/ 2> /dev/null; (($? == 2)) && echo 'Done' >&2 
