@@ -13,13 +13,13 @@ jobs:
         - npm --version
 
     - stage: test
-      install:
-        - npm install cypress --save-dev
+      #install:
+        #- npm install cypress --save-dev
       script:
         - npm start &
       #Execucao do cypress no nosso site hosteado
-        - yarn run test:search
-        #- docker run -it -v $PWD:/e2e -w /e2e cypress/included
+        #- yarn run test:search
+        - docker run --add-host=host.docker.internal:host-gateway -it -v $PWD:/e2e -w /e2e cypress/included
         - echo "Teste bdd concluido"
       
         #Execucao do OWASP ZAP no nosso site hosteado, ignorando warnings (apenas parando se houver algum problema)
