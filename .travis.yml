@@ -17,7 +17,7 @@ jobs:
         - npm install cypress --save-dev
       script:
         - npm start &
-    #Execucao do cypress no nosso site hosteado
+      #Execucao do cypress no nosso site hosteado
         - yarn run test:search
         #- docker run -it -v $PWD:/e2e -w /e2e cypress/included
         - echo "Teste bdd concluido"
@@ -29,16 +29,15 @@ jobs:
         #- sudo apt update
         #- sudo apt install owasp-zap
     - stage: deploy
-      before_deploy:
+      #before_deploy:
+      install:
         - npm install netlify-cli -g
         - yarn build
-      deploy:
-        provider: script
-        edge: true
-        script: netlify deploy --dir=build --prod
-        on:
-          branch: main
-      after_deploy:
+      #provider: script
+        #edge: true
+      script: 
+        - netlify deploy --dir=build --prod
+      after_script:
         # Em caso de sucesso enviará uma mensagem para o telegram
         - bash ./telegram_notification.sh
         - echo "Success! :D"
