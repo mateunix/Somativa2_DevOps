@@ -1,38 +1,38 @@
-language: node_js
+jobs:
+  include:
+  - stage: build
+    language: node_js
+    os: linux
+    dist: focal
+    node_js:
+      - lts/*
+    cache: npm
+    install:
+      - npm install
 
-os: linux
-
-dist: focal
-
-node_js:
-  - lts/*
-
-cache: npm
-
-install:
-  - npm install
-
-script :
+  - stage: test
+    script:
   #Pull dá imagem no dockerhub
-  - docker pull mateunix/somativa:2.0
+    #- docker pull mateunix/somativa:2.0
   #Execucao do cypress no nosso site hosteado
-  - docker run -it -v $PWD:/e2e -w /e2e cypress/included
-  - echo "Teste bdd concluido"
+      - docker run -it -v $PWD:/e2e -w /e2e cypress/included
+      - echo "Teste bdd concluido"
   #Execucao do OWASP ZAP no nosso site hosteado, ignorando warnings (apenas parando se houver algum problema)
-  - docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t https://agredevops.netlify.app/ 2> /dev/null; (($? == 2)) && echo 'Done' >&2 
-  - echo "Teste zap concluido"
-
-before_deploy:
-  - npm install netlify-cli -g
-  - yarn build
+      - docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t https://agredevops.netlify.app/ 2> /dev/null; (($? == 2)) && echo 'Done' >&2 
+      - echo "Teste zap concluido"
+      
+  - stage: deploy
+    before_deploy:
+    - npm install netlify-cli -g
+    - yarn build
+    deploy:
   
-deploy:
-  provider: script
-  edge: true
-  script: netlify deploy --dir=build --prod
-  on:
-    branch: main
-after_deploy:
-  # Em caso de sucesso enviará uma mensagem para o telegram
-    - bash ./telegram_notification.sh
-    - echo "Success! :D"
+      provider: script
+      edge: true
+      script: netlify deploy --dir=build --prod
+      on:
+        branch: main
+    after_deploy:
+     # Em caso de sucesso enviará uma mensagem para o telegram
+      - bash ./telegram_notification.sh
+      - echo "Success! :D"
