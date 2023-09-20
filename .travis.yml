@@ -13,31 +13,19 @@ jobs:
         - npm --version
 
     - stage: test
-      #install:
-        #- npm install cypress --save-dev
       script:
         - npm start &
-      #Execucao do cypress no nosso site hosteado
-        #- yarn run test:search
+      #Execucao do cypress no host
         - docker run --add-host=host.docker.internal:host-gateway -it -v $PWD:/e2e -w /e2e cypress/included
-        - echo "Teste bdd concluido"
-      
-        #Execucao do OWASP ZAP no nosso site hosteado, ignorando warnings (apenas parando se houver algum problema)
+        - echo "Teste Cypress concluido"
+         #Execucao do OWASP ZAP no host, ignorando warnings (apenas parando se houver algum problema/falha)
         - docker run --add-host=host.docker.internal:host-gateway -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t http://host.docker.internal:3000 2> /dev/null; (($? == 2)) && echo 'Done' >&2 
-        #- echo "Teste zap concluido"
-        #- echo 'deb http://download.opensuse.org/repositories/home:/cabelo/xUbuntu_20.04/ /' | sudo tee /etc/apt/sources.list.d/home:cabelo.list
-        #- curl -fsSL https://download.opensuse.org/repositories/home:cabelo/xUbuntu_20.04/Release.key | sudo gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_cabelo.gpg > /dev/null
-        #- sudo apt update
-        #- zap.sh -daemon -quickurl http://localhost:3000 -quickout /tmp/myresults.xml -quickprogress
+        - echo "Teste Zap Full Scan concluido"
 
     - stage: deploy
-      #before_deploy:
       install:
         - npm install netlify-cli -g
         - npm install --save react react-dom react-scripts
-        
-      #provider: script
-        #edge: true
       script:
         - yarn build 
         - netlify deploy --dir=build --prod
