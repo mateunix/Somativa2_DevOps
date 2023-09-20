@@ -18,7 +18,7 @@ jobs:
       script:
         - npm start &
     #Execucao do cypress no nosso site hosteado
-        - npx run cypress
+        - yarn run cypress
         #- docker run -it -v $PWD:/e2e -w /e2e cypress/included
         - echo "Teste bdd concluido"
         #Execucao do OWASP ZAP no nosso site hosteado, ignorando warnings (apenas parando se houver algum problema)
