@@ -1,5 +1,6 @@
 os: linux
 dist: focal
+sudo: required
 language: node_js
 node_js:
       - 18
@@ -21,21 +22,25 @@ jobs:
         - yarn run test:search
         #- docker run -it -v $PWD:/e2e -w /e2e cypress/included
         - echo "Teste bdd concluido"
+      
         #Execucao do OWASP ZAP no nosso site hosteado, ignorando warnings (apenas parando se houver algum problema)
         #- docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t https://agredevops.netlify.app/ 2> /dev/null; (($? == 2)) && echo 'Done' >&2 
         #- echo "Teste zap concluido"
-        #- echo 'deb http://download.opensuse.org/repositories/home:/cabelo/xUbuntu_20.04/ /' | sudo tee /etc/apt/sources.list.d/home:cabelo.list
-        #- curl -fsSL https://download.opensuse.org/repositories/home:cabelo/xUbuntu_20.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_cabelo.gpg > /dev/null
-        #- sudo apt update
-        #- sudo apt install owasp-zap
+        - echo 'deb http://download.opensuse.org/repositories/home:/cabelo/xUbuntu_20.04/ /' | sudo tee /etc/apt/sources.list.d/home:cabelo.list
+        - curl -fsSL https://download.opensuse.org/repositories/home:cabelo/xUbuntu_20.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_cabelo.gpg > /dev/null
+        - apt update
+        - apt install owasp-zap
+
     - stage: deploy
       #before_deploy:
       install:
         - npm install netlify-cli -g
-        - yarn build
+        - npm install --save react react-dom react-scripts
+        
       #provider: script
         #edge: true
-      script: 
+      script:
+        - yarn build 
         - netlify deploy --dir=build --prod
       after_script:
         # Em caso de sucesso enviará uma mensagem para o telegram
