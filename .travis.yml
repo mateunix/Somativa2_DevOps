@@ -15,10 +15,10 @@ jobs:
     - stage: test
       script:
         - npm start &
-      #Execucao do cypress no host
+        # Execucao do cypress no host
         - docker run --add-host=host.docker.internal:host-gateway -it -v $PWD:/e2e -w /e2e cypress/included
         - echo "Teste Cypress concluido"
-         #Execucao do OWASP ZAP no host, ignorando warnings (apenas parando se houver algum problema/falha)
+         # Execucao do OWASP ZAP no host, ignorando warnings (apenas parando se houver algum problema/falha)
         - docker run --add-host=host.docker.internal:host-gateway -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-full-scan.py -t http://host.docker.internal:3000 2> /dev/null; (($? == 2)) && echo 'Done' >&2 
         - echo "Teste Zap Full Scan concluido"
 
